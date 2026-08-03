@@ -17,7 +17,7 @@ export async function logActivity({
         userId,
         messId,
         action,
-        details: details ? details : undefined,
+        details: details ? (details as any) : undefined,
       }
     })
   } catch (error) {

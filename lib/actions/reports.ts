@@ -27,8 +27,7 @@ export async function getMonthlyReportData(month: number, year: number) {
   const deposits = await prisma.deposit.findMany({
     where: { messId, date: { gte: startDate, lte: endDate } },
     include: {
-      user: { select: { name: true } },
-      addedBy: { select: { name: true } }
+      user: { select: { name: true } }
     },
     orderBy: { date: 'asc' }
   })
@@ -42,6 +41,12 @@ export async function getMonthlyReportData(month: number, year: number) {
     orderBy: { date: 'asc' }
   })
 
+  const allUsers = await prisma.user.findMany({
+    where: { messId },
+    select: { id: true, name: true }
+  })
+  const userMap = new Map(allUsers.map(u => [u.id, u.name]))
+
   return {
     summary,
     meals: meals.map(m => ({
@@ -53,7 +58,7 @@ export async function getMonthlyReportData(month: number, year: number) {
       ...d,
       date: d.date.toISOString(),
       userName: d.user.name,
-      addedByName: d.addedBy?.name || "Unknown"
+      addedByName: userMap.get(d.addedById) || "Unknown"
     })),
     expenses: expenses.map(e => ({
       ...e,

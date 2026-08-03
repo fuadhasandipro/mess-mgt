@@ -1,0 +1,113 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+model Mess {
+  id           String        @id @default(cuid())
+  name         String
+  createdAt    DateTime      @default(now())
+  users        User[]
+  meals        Meal[]
+  deposits     Deposit[]
+  expenses     Expense[]
+  managerTerms ManagerTerm[]
+  activityLogs ActivityLog[]
+}
+
+model User {
+  id            String        @id @default(cuid())
+  username      String        @unique
+  passwordHash  String
+  name          String
+  phone         String?
+  role          Role          @default(MEMBER)
+  isActive      Boolean       @default(true)
+  messId        String
+  mess          Mess          @relation(fields: [messId], references: [id])
+  createdAt     DateTime      @default(now())
+  meals         Meal[]
+  deposits      Deposit[]
+  expensesAdded Expense[]     @relation("ExpenseAddedBy")
+  managerTerms  ManagerTerm[]
+  activityLogs  ActivityLog[]
+}
+
+model Meal {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  messId     String
+  mess       Mess     @relation(fields: [messId], references: [id])
+  date       DateTime @db.Date
+  breakfast  Float    @default(0)
+  lunch      Float    @default(0)
+  dinner     Float    @default(0)
+  updatedById String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([userId, date])
+}
+
+model Deposit {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  messId    String
+  mess      Mess     @relation(fields: [messId], references: [id])
+  amount    Float
+  date      DateTime @db.Date
+  note      String?
+  addedById String
+  createdAt DateTime @default(now())
+}
+
+model Expense {
+  id         String   @id @default(cuid())
+  messId     String
+  mess       Mess     @relation(fields: [messId], references: [id])
+  amount     Float
+  category   String   // "bazar" | "utility" | "other"
+  date       DateTime @db.Date
+  note       String?
+  addedById  String
+  addedBy    User     @relation("ExpenseAddedBy", fields: [addedById], references: [id])
+  createdAt  DateTime @default(now())
+}
+
+model ManagerTerm {
+  id           String   @id @default(cuid())
+  messId       String
+  mess         Mess     @relation(fields: [messId], references: [id])
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  month        Int      // 1-12
+  year         Int
+  assignedById String
+  assignedAt   DateTime @default(now())
+
+  @@unique([messId, month, year])
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  messId    String
+  mess      Mess     @relation(fields: [messId], references: [id])
+  action    String   // e.g. MEAL_UPDATED, MEMBER_ADDED, MANAGER_PROMOTED
+  details   Json?
+  createdAt DateTime @default(now())
+}

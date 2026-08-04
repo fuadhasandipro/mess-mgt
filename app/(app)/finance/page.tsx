@@ -1,6 +1,7 @@
 import { requireRole } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { FinanceClient } from "@/components/finance/finance-client"
+import { getBDNow } from "@/lib/timezone"
 
 export default async function FinancePage({
   searchParams
@@ -11,7 +12,7 @@ export default async function FinancePage({
   const session = await requireRole(["ADMIN", "MANAGER", "MEMBER"])
   const messId = session.user.messId
   
-  const now = new Date()
+  const now = getBDNow()
   const currentMonth = now.getMonth() + 1
   const currentYear = now.getFullYear()
   

@@ -62,12 +62,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                 <ShieldCheck className="h-5 w-5" />
                 <span>Manager</span>
               </Link>
-              <Link href="/activity-log" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted">
-                <Activity className="h-5 w-5" />
-                <span>Activity Log</span>
-              </Link>
             </>
           )}
+          <Link href="/activity-log" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted">
+            <Activity className="h-5 w-5" />
+            <span>Activity Log</span>
+          </Link>
           <Link href="/profile" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted">
             <User className="h-5 w-5" />
             <span>Profile</span>

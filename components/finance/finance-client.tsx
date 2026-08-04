@@ -100,7 +100,14 @@ export function FinanceClient({
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: "deposit"|"expense", id: string } | null>(null)
 
   // Forms
-  const todayStr = new Date().toISOString().split("T")[0]
+  // Use locale-aware date to get today in the user's browser timezone (Bangladesh), not UTC
+  const todayStr = (() => {
+    const d = new Date()
+    const y = d.getFullYear()
+    const m = String(d.getMonth() + 1).padStart(2, "0")
+    const day = String(d.getDate()).padStart(2, "0")
+    return `${y}-${m}-${day}`
+  })()
   const [depForm, setDepForm] = useState({ userId: "", amount: "", date: todayStr, note: "" })
   const [expForm, setExpForm] = useState({ amount: "", category: "Bazar", date: todayStr, note: "" })
 

@@ -57,15 +57,17 @@ export function ActivityLogClient({
     router.push(`/activity-log?${params.toString()}`)
   }
 
-  // Group logs by day
+  // Group logs by day — logs already arrive sorted desc from the server
   const groupedLogs = initialLogs.reduce((acc, log) => {
-    // Ensure date is properly parsed if passed from Server Component as string
     const d = new Date(log.createdAt)
     const day = format(d, "yyyy-MM-dd")
     if (!acc[day]) acc[day] = []
     acc[day].push({ ...log, createdAt: d })
     return acc
   }, {} as Record<string, typeof initialLogs>)
+
+  // Sort day-keys in descending order (latest date first)
+  const sortedDays = Object.keys(groupedLogs).sort((a, b) => b.localeCompare(a))
 
   return (
     <Card>
@@ -104,7 +106,9 @@ export function ActivityLogClient({
           </div>
         ) : (
           <div className="space-y-8">
-            {Object.entries(groupedLogs).map(([day, logs]) => (
+            {sortedDays.map((day) => {
+              const logs = groupedLogs[day]
+              return (
               <div key={day}>
                 <h3 className="text-sm font-bold text-muted-foreground mb-4 uppercase tracking-wider sticky top-0 bg-card py-2 z-10 border-b">
                   {format(new Date(day), "MMMM d, yyyy")}
@@ -134,7 +138,8 @@ export function ActivityLogClient({
                   ))}
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         )}
 

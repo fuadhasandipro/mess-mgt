@@ -10,6 +10,7 @@ import { getMonthSummary } from "@/lib/calculations"
 import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { ExportReportButton } from "@/components/shared/export-report-button"
+import { getBDNow } from "@/lib/timezone"
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
@@ -19,7 +20,7 @@ export default async function DashboardPage() {
 
   if (!messId || !userId) return null
 
-  const now = new Date()
+  const now = getBDNow()
   const month = now.getMonth() + 1
   const year = now.getFullYear()
 

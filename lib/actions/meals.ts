@@ -4,6 +4,7 @@ import { requireRole } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { z } from "zod"
 import { logActivity } from "@/lib/activity-log"
+import { getBDNow } from "@/lib/timezone"
 
 const mealSchema = z.object({
   userId: z.string(),
@@ -28,7 +29,7 @@ export async function upsertMeal(input: z.infer<typeof mealSchema>) {
   const d = parseInt(dayStr)
   const dateObj = new Date(Date.UTC(y, m, d))
   
-  const now = new Date()
+  const now = getBDNow()
   const currentMonth = now.getMonth()
   const currentYear = now.getFullYear()
 

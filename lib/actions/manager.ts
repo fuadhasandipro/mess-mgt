@@ -4,12 +4,13 @@ import { requireRole } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { revalidatePath } from "next/cache"
 import { logActivity } from "@/lib/activity-log"
+import { getBDNow } from "@/lib/timezone"
 
 export async function assignManager(userId: string) {
   const session = await requireRole(["ADMIN", "MANAGER"])
   const messId = session.user.messId
 
-  const now = new Date()
+  const now = getBDNow()
   const month = now.getMonth() + 1
   const year = now.getFullYear()
 

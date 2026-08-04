@@ -19,6 +19,7 @@ export function MobileNav({ isAdmin }: MobileNavProps) {
     { name: "Home", href: "/dashboard", icon: Home },
     { name: "Meals", href: "/meals", icon: Utensils },
     { name: "Finance", href: "/finance", icon: DollarSign },
+    { name: "Log", href: "/activity-log", icon: Activity },
   ]
 
   if (!isAdmin) {

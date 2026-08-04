@@ -1,12 +1,13 @@
 import { requireRole } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { ManagerClient } from "@/components/manager/manager-client"
+import { getBDNow } from "@/lib/timezone"
 
 export default async function ManagerPage() {
   const session = await requireRole(["ADMIN", "MANAGER"])
   const messId = session.user.messId
 
-  const now = new Date()
+  const now = getBDNow()
   const month = now.getMonth() + 1
   const year = now.getFullYear()
 

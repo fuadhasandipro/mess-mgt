@@ -23,7 +23,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <Toaster />
       {/* Mobile Header */}
       <header className="flex items-center justify-between p-4 border-b md:hidden">
-        <h1 className="font-semibold text-lg">Test Mess</h1>
+        <h1 className="font-semibold text-lg">Alpha</h1>
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <UserMenu user={session.user as any} />
@@ -36,7 +36,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
           <UserMenu user={session.user as any} />
           <div>
             <div className="font-semibold truncate w-40">{session.user.name || session.user.username}</div>
-            <div className="text-xs text-muted-foreground">Test Mess</div>
+            <div className="text-xs text-muted-foreground">Alpha</div>
           </div>
         </div>
         <nav className="flex-1 p-4 space-y-2">

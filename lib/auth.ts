@@ -117,7 +117,7 @@ export async function requireRole(allowedRoles: string[]) {
   }
   
   if (!allowedRoles.includes(session.user.role)) {
-    throw new Error("Unauthorized Access: Missing required role.")
+    redirect("/dashboard")
   }
   
   return session

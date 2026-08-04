@@ -58,7 +58,8 @@ export async function addDeposit(input: z.infer<typeof depositSchema>) {
     action: "DEPOSIT_ADDED",
     details: { targetName: targetUser.name, amount }
   })
-  
+
+  revalidatePath("/finance")
   return { success: true, deposit }
 }
 
@@ -88,6 +89,7 @@ export async function deleteDeposit(id: string) {
     })
   }
 
+  revalidatePath("/finance")
   return { success: true }
 }
 
@@ -132,7 +134,8 @@ export async function addExpense(input: z.infer<typeof expenseSchema>) {
     action: "EXPENSE_ADDED",
     details: { category, amount }
   })
-  
+
+  revalidatePath("/finance")
   return { success: true, expense }
 }
 
@@ -155,5 +158,6 @@ export async function deleteExpense(id: string) {
     details: { category: expense.category, amount: expense.amount }
   })
 
+  revalidatePath("/finance")
   return { success: true }
 }

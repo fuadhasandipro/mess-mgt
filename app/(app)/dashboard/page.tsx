@@ -46,7 +46,8 @@ export default async function DashboardPage() {
   const currentManager = term
   const currentMonthName = format(now, "MMMM yyyy")
   const daysInMonth = getDaysInMonth(now)
-  const daysLeft = daysInMonth - now.getDate()
+  const todayBD = parseInt(now.toISOString().split("T")[0].split("-")[2], 10)
+  const daysLeft = daysInMonth - todayBD
 
   const isMember = role === "MEMBER"
   const isAdmin = role === "ADMIN" || role === "MANAGER"

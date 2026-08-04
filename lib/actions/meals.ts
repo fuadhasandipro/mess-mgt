@@ -3,6 +3,7 @@
 import { requireRole } from "@/lib/auth"
 import { prisma } from "@/lib/db"
 import { z } from "zod"
+import { revalidatePath } from "next/cache"
 import { logActivity } from "@/lib/activity-log"
 import { getBDNow } from "@/lib/timezone"
 
@@ -64,6 +65,9 @@ export async function upsertMeal(input: z.infer<typeof mealSchema>) {
     action: "MEAL_UPDATED",
     details: { targetName: user.name, date, lunch, dinner }
   })
+
+  revalidatePath("/meals")
+  revalidatePath("/finance")
   
   return { success: true, meal }
 }

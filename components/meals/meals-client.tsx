@@ -100,6 +100,7 @@ export function MealsClient({
       setMealsMap(prev => ({ ...prev, [key]: current }))
     } else {
       toast.success(`Saved meal for Day ${day}`, { duration: 1500 })
+      router.refresh()
     }
   }
 

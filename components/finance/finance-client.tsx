@@ -165,13 +165,21 @@ export function FinanceClient({
       toast.error(res.error)
     } else if (res.deposit) {
       toast.success("Deposit recorded")
-      // Fetch latest or just reload. Next.js server actions revalidatePath might just work.
-      // But to be fully optimistic/fast without waiting for RSC payload if we don't want to:
-      // Actually, since we revalidatePath in the action, it might not happen if we don't call it. 
-      // The instructions said we use `revalidatePath`. Let's just do a router.refresh() 
-      router.refresh()
+      // Optimistically add to local state so it shows immediately
+      const user = activeUsers.find(u => u.id === depForm.userId)
+      const optimisticDeposit: Deposit = {
+        id: res.deposit.id,
+        userId: depForm.userId,
+        amount: parseFloat(depForm.amount),
+        date: new Date(depForm.date).toISOString(),
+        note: depForm.note || null,
+        user: { name: user?.name ?? "" },
+        recordedBy: { name: "" },
+      }
+      setDeposits(prev => [optimisticDeposit, ...prev])
       setIsDepositOpen(false)
       setDepForm({ userId: "", amount: "", date: todayStr, note: "" })
+      router.refresh()
     }
   }
 
@@ -190,9 +198,19 @@ export function FinanceClient({
       toast.error(res.error)
     } else if (res.expense) {
       toast.success("Expense recorded")
-      router.refresh()
+      // Optimistically add to local state so it shows immediately
+      const optimisticExpense: Expense = {
+        id: res.expense.id,
+        amount: parseFloat(expForm.amount),
+        category: expForm.category,
+        date: new Date(expForm.date).toISOString(),
+        note: expForm.note || null,
+        recordedBy: { name: "" },
+      }
+      setExpenses(prev => [optimisticExpense, ...prev])
       setIsExpenseOpen(false)
       setExpForm({ amount: "", category: "Bazar", date: todayStr, note: "" })
+      router.refresh()
     }
   }
 
@@ -211,6 +229,12 @@ export function FinanceClient({
       toast.error(res.error)
     } else {
       toast.success("Record deleted")
+      // Optimistically remove from local state
+      if (deleteConfirm.type === "deposit") {
+        setDeposits(prev => prev.filter(d => d.id !== deleteConfirm.id))
+      } else {
+        setExpenses(prev => prev.filter(e => e.id !== deleteConfirm.id))
+      }
       router.refresh()
     }
     setDeleteConfirm(null)

@@ -48,7 +48,7 @@ export default async function DashboardPage() {
   const daysLeft = daysInMonth - now.getDate()
 
   const isMember = role === "MEMBER"
-  const isAdmin = role === "ADMIN"
+  const isAdmin = role === "ADMIN" || role === "MANAGER"
   const isManager = role === "MANAGER"
   const mySummary = summary.memberSummaries.find(m => m.userId === userId)
 

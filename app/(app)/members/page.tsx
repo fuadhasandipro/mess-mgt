@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db"
 import { MembersClient } from "@/components/members/members-client"
 
 export default async function MembersPage() {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
 
   const users = await prisma.user.findMany({
     where: { messId: session.user.messId },

@@ -106,7 +106,7 @@ export function FinanceClient({
 
   const now = new Date()
   const isPastMonth = month !== (now.getMonth() + 1) || year !== now.getFullYear()
-  const canEdit = currentUserRole === "ADMIN" || (currentUserRole === "MANAGER" && !isPastMonth)
+  const canEdit = currentUserRole === "ADMIN" || currentUserRole === "MANAGER"
 
   // Filter deposits for MEMBER
   const visibleDeposits = currentUserRole === "MEMBER" 

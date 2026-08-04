@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { assignManager } from "@/lib/actions/manager"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -18,7 +20,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 import { format } from "date-fns"
 import { Loader2, ShieldCheck, User } from "lucide-react"
-
+import { toast } from "sonner"
 type ManagerTerm = {
   id: string
   month: number
@@ -50,15 +52,27 @@ export function ManagerClient({
   const [isOpen, setIsOpen] = useState(false)
   const [selectedUserId, setSelectedUserId] = useState<string>("")
   const [isLoading, setIsLoading] = useState(false)
+  const { update } = useSession()
+  const router = useRouter()
 
   const handleAssign = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!selectedUserId) return
     setIsLoading(true)
-    const res = await assignManager(selectedUserId)
-    setIsLoading(false)
-    if (res.success) {
-      setIsOpen(false)
+    try {
+      const res = await assignManager(selectedUserId)
+      if (res.success) {
+        await update()
+        router.refresh()
+        setIsOpen(false)
+        toast.success("Manager Assigned")
+      } else {
+        throw new Error("Failed to assign manager")
+      }
+    } catch (error: any) {
+      toast.error(error.message)
+    } finally {
+      setIsLoading(false)
     }
   }
 

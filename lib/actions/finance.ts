@@ -9,12 +9,7 @@ import { logActivity } from "@/lib/activity-log"
 // --- HELPERS ---
 
 async function checkDatePermission(date: Date, role: string) {
-  if (role === "ADMIN") return null
-  
-  const now = new Date()
-  if (date.getMonth() !== now.getMonth() || date.getFullYear() !== now.getFullYear()) {
-    return "Managers can only modify records for the current month."
-  }
+  if (role === "ADMIN" || role === "MANAGER") return null
   return null
 }
 

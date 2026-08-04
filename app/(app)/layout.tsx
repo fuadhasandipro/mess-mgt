@@ -7,6 +7,7 @@ import { UserMenu } from "@/components/shared/user-menu"
 import { redirect } from "next/navigation"
 import { Toaster } from "@/components/ui/sonner"
 import { MobileNav } from "@/components/layout/mobile-nav"
+import { ThemeToggle } from "@/components/shared/theme-toggle"
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await getServerSession(authOptions)
@@ -15,7 +16,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     redirect("/login")
   }
 
-  const isAdmin = session.user.role === "ADMIN"
+  const isAdmin = session.user.role === "ADMIN" || session.user.role === "MANAGER"
 
   return (
     <div className="flex h-screen flex-col md:flex-row bg-background">
@@ -23,7 +24,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       {/* Mobile Header */}
       <header className="flex items-center justify-between p-4 border-b md:hidden">
         <h1 className="font-semibold text-lg">Test Mess</h1>
-        <UserMenu user={session.user as any} />
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <UserMenu user={session.user as any} />
+        </div>
       </header>
 
       {/* Desktop Sidebar */}
@@ -69,6 +73,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
             <span>Profile</span>
           </Link>
         </nav>
+        <div className="p-4 border-t">
+          <ThemeToggle />
+        </div>
       </aside>
 
       {/* Main Content */}

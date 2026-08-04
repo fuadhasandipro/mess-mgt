@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache"
 import { logActivity } from "@/lib/activity-log"
 
 export async function assignManager(userId: string) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   const messId = session.user.messId
 
   const now = new Date()

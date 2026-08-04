@@ -44,7 +44,6 @@ export default async function MealsPage({
       id: true,
       userId: true,
       date: true,
-      breakfast: true,
       lunch: true,
       dinner: true
     }

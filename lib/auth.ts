@@ -84,6 +84,16 @@ export const authOptions: NextAuthOptions = {
         token.username = user.username
         token.role = user.role
         token.messId = user.messId
+      } else if (token.id) {
+        // Fetch fresh role from DB to prevent stale permissions after role changes
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { role: true, messId: true }
+        })
+        if (dbUser) {
+          token.role = dbUser.role
+          token.messId = dbUser.messId
+        }
       }
       return token
     },

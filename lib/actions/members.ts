@@ -15,7 +15,7 @@ const createMemberSchema = z.object({
 })
 
 export async function createMember(input: z.infer<typeof createMemberSchema>) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   
   const parsed = createMemberSchema.safeParse(input)
   if (!parsed.success) {
@@ -61,7 +61,7 @@ const updateMemberSchema = z.object({
 })
 
 export async function updateMember(id: string, input: z.infer<typeof updateMemberSchema>) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   
   const parsed = updateMemberSchema.safeParse(input)
   if (!parsed.success) {
@@ -102,7 +102,7 @@ const resetPasswordSchema = z.object({
 })
 
 export async function resetPassword(id: string, newPassword: string) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   
   const parsed = resetPasswordSchema.safeParse({ password: newPassword })
   if (!parsed.success) {
@@ -129,7 +129,7 @@ export async function resetPassword(id: string, newPassword: string) {
 }
 
 export async function setActive(id: string, isActive: boolean) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   
   await prisma.user.update({
     where: { id, messId: session.user.messId },

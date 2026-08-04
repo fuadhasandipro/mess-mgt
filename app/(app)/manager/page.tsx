@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db"
 import { ManagerClient } from "@/components/manager/manager-client"
 
 export default async function ManagerPage() {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   const messId = session.user.messId
 
   const now = new Date()

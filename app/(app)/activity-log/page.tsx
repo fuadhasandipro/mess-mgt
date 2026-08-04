@@ -7,7 +7,7 @@ export default async function ActivityLogPage({
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }) {
-  const session = await requireRole(["ADMIN"])
+  const session = await requireRole(["ADMIN", "MANAGER"])
   const messId = session.user.messId
 
   const resolvedParams = await searchParams

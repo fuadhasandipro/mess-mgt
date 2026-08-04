@@ -53,7 +53,7 @@ export async function getMonthSummary({ messId, month, year }: { messId: string,
 
   let totalMeals = 0
   meals.forEach(m => {
-    const mealCount = (m.breakfast * 0.5) + m.lunch + m.dinner
+    const mealCount = m.lunch + m.dinner
     totalMeals += mealCount
     const stat = userStats.get(m.userId)
     if (stat) stat.meals += mealCount

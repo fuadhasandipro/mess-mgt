@@ -17,7 +17,12 @@ export async function getMonthlyReportData(month: number, year: number) {
   // 2. Get Meals
   const meals = await prisma.meal.findMany({
     where: { messId, date: { gte: startDate, lte: endDate } },
-    include: {
+    select: {
+      id: true,
+      userId: true,
+      date: true,
+      lunch: true,
+      dinner: true,
       user: { select: { name: true } }
     },
     orderBy: [{ user: { name: 'asc' } }, { date: 'asc' }]

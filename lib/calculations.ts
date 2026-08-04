@@ -30,7 +30,8 @@ export async function getMonthSummary({ messId, month, year }: { messId: string,
 
   // Fetch all relevant data
   const meals = await prisma.meal.findMany({
-    where: { messId, date: { gte: startDate, lte: endDate } }
+    where: { messId, date: { gte: startDate, lte: endDate } },
+    select: { userId: true, lunch: true, dinner: true }
   })
 
   const deposits = await prisma.deposit.findMany({

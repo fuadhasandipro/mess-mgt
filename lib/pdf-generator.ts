@@ -60,7 +60,7 @@ export function generateMonthlyPDFReport(data: any, month: number, year: number)
   
   data.meals.forEach((m: any) => {
     const day = new Date(m.date).getDate()
-    const mealCount = (m.breakfast * 0.5) + m.lunch + m.dinner
+    const mealCount = m.lunch + m.dinner
     if (!userMap.has(m.userId)) {
       userMap.set(m.userId, { name: m.userName, days: {} })
     }

@@ -53,7 +53,7 @@ export function describeActivity(log: { action: string; details: any; user: { na
       
     // Meals
     case "MEAL_UPDATED":
-      return `${actor} updated meals for ${details?.targetName || "a member"} on ${details?.date} (B: ${details?.breakfast}, L: ${details?.lunch}, D: ${details?.dinner}).`
+      return `${actor} updated meals for ${details?.targetName || "a member"} on ${details?.date} (L: ${details?.lunch}, D: ${details?.dinner}).`
       
     // Finance
     case "DEPOSIT_ADDED":
